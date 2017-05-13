@@ -1,0 +1,59 @@
+#!/usr/bin/env python
+# cording: utf-8
+import RPi.GPIO as GPIO
+import sys, time
+import rospy
+from std_msgs.msg import String
+from geometry_msgs.msg import Twist
+
+class steer_controller:
+	pins = [pin_Ap,pin_An,pin_Bp,pin_Bn] = [13,15,16,18]
+	minmax = 30				#max arg(degree) 
+	s_arg = 0.5				#step arg(degree)
+	width = 0.012
+
+	stepper = [[0,1],[2,3]]
+	hl = [GPIO.HIGH,GPIO.LOW]
+
+	def __init__(self):
+		self.subscriber = rospy.Subscriber("cmd_vel", Twist, self.callback)
+		GPIO.setmode(GPIO.BOARD)
+		GPIO.setup(self.pins,GPIO.OUT)
+		self.current_step = 0 #current position
+
+	def callback(self, ros_data):
+		self.arg = self.minmax * ros_data.angular.z
+		arg_step = int(self.arg / self.s_arg)		
+		step_n = arg_step - self.current_step
+		print(self.arg)
+		if step_n != 0:
+			direction = -1 * int(step_n / abs(step_n))
+			self.step(direction)
+		else:
+			for i in range(0,4):
+				GPIO.output(self.pins[i],GPIO.LOW)
+
+	def step(self,direction):
+		var = direction -1
+		for i in range(0,2):
+			for j in self.stepper:
+				GPIO.output(self.pins[j[0] + var], self.hl[i])
+				GPIO.output(self.pins[j[1] + var], self.hl[i - 1])
+				time.sleep(self.width)
+		self.current_step += direction
+
+	def close_pin(self):
+		GPIO.cleanup()
+
+def main(args):
+	sc = steer_controller()
+	rospy.init_node('steer_controller', anonymous=True)
+	try:
+		rospy.spin()
+	except KeyboardInterruput:
+		print "Shutting down ROS motor controller"
+		mc.close_pin()	
+
+if __name__ == '__main__':
+	main(sys.argv)
+		

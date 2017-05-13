@@ -1,0 +1,11 @@
+<?xml version="1.0"?>
+
+<!--  Copyright (c) 2017, Hiroki Urase
+      All rights reserved.             -->
+
+<launch>
+  
+  <node pkg="joy" type="joy_node" name="joy_node">
+  	<param name="dev" value="/dev/input/js0" />
+  </node>
+</launch>

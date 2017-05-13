@@ -1,0 +1,12 @@
+<?xml version="1.0"?>
+
+<!--  Copyright (c) 2017, Hiroki Urase
+      All rights reserved.             -->
+
+<launch>
+  
+  <node pkg="cloud_links_core" type="cloud_links_core.py" name="cloud_links_core" />
+
+  <include file="$(find utm_simple_goal)/launch/utm_simple_goal.launch" />
+
+</launch>

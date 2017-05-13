@@ -1,0 +1,19 @@
+<?xml version="1.0"?>
+
+<!--  Copyright (c) 2017, Hiroki Urase
+      All rights reserved.             -->
+
+<launch>
+  
+  <node pkg="gps_common" type="utm_odometry_node" name="utm_odometry_node">
+    <param name="frame_id" value="map" />
+    <param name="chaild_frame_id" value="utm" />
+    <remap from="fix" to="utm" />
+    <remap from="odom" to="odom/goal" />
+  </node>
+  
+  <node pkg="utm_simple_goal" type="utm_simple_goal.py" name="utm_simple_goal" />
+  
+
+</launch>
+

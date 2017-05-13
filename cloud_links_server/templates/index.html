@@ -1,0 +1,36 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+    <title>Flask-SocketIO Test</title>
+    <script type="text/javascript" src="//code.jquery.com/jquery-1.4.2.min.js"></script>
+    <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/socket.io/1.3.5/socket.io.min.js"></script>
+    <script type="text/javascript" charset="utf-8">
+        $(document).ready(function() {
+            var socket = io.connect(location.protocol + '//' + document.domain + ':' + location.port);
+
+            socket.on('redirect', function(msg) {
+                window.location = msg.url;
+                // $('#log').append('<br>' + $('<div/>').text('Received #' + msg.count + ': ' + msg.data).html());
+            });
+
+        });
+    </script>
+</head>
+<body>
+    <h1>Flask-SocketIO Test</h1>
+    <form action="/post" method="post">
+        <input type="text" name="latitude" id="latitude" placeholder="latitude">
+        <input type="text" name="longitude" id="longitude" placeholder="longitude">
+        <button type='submit' name='action' value = 'post'>post</button>
+    </form>
+    <form action="/post" method="post">
+        <input type="text" name="fixedkey" id="fixedkey" placeholder="fixedkey">
+        <button type='submit' name='action' value = 'setfixed'>set</button>
+    </form>
+    <form action="/post" method="post">
+		<button type='submit' name='action' value = "getpos">get status</button>
+        <button type='submit' name='action' value = "loadpos">load pos</button>
+	</form>
+    <p>{{message}}</p>
+</body>
+</html>
